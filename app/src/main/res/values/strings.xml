@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">PMControlPuntoVenta</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title_activity_login">Login</string>
+    <string name="login_title">Login</string>
+    <string name="user">User</string>
+    <string name="pwd">Password</string>
 </resources>
