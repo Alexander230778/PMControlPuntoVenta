@@ -1,5 +1,8 @@
 package pe.edu.upc.pmcontrolpuntoventa.utilities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,5 +38,17 @@ public class Utility {
      */
     public static boolean isNotNull(String txt){
         return txt!=null && txt.trim().length()>0 ? true: false;
+    }
+
+    public static Date convertDate(String txt){
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            date = format.parse(txt);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return date;
     }
 }

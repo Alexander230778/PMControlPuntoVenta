@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,12 +13,16 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
+import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText nameET;
     // Password Edit View Object
     EditText pwdET;
+
+    private static String TAG="Login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
         } else{
             Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
@@ -105,7 +111,36 @@ public class LoginActivity extends AppCompatActivity {
      * @param params
      */
     public void invokeWS(RequestParams params){
-        // Show Progress Dialog
+        //FORMA2
+        AndroidNetworking.post(NewsApi.LOGIN_URL)
+                .addBodyParameter(params)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getString("status").equalsIgnoreCase("ACTIVE")){
+                                Toast.makeText(getApplicationContext(), "You are successfully logged in!" + response.getString("api_token"), Toast.LENGTH_LONG).show();
+                                Log.d(TAG, response.getString("api_token"));
+                                // Navigate to Home screen
+                                navigatetoHome();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // Hide Progress Dialog
+                        prgDialog.hide();
+                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, anError.getLocalizedMessage());
+                    }
+                });
+
+        //FORMA1
+        /*// Show Progress Dialog
         prgDialog.show();
         // Make RESTful webservice call using AsyncHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
@@ -119,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                     // JSON Object
                     JSONObject obj = new JSONObject(response.toString());
                     // When the JSON response has status boolean value assigned with true
-                    if(obj.getString("status")=="ACTIVE"){
+                    if(obj.getString("status").equalsIgnoreCase("ACTIVE")){
                         Toast.makeText(getApplicationContext(), "You are successfully logged in!" + obj.getString("api_token"), Toast.LENGTH_LONG).show();
                         // Navigate to Home screen
                         navigatetoHome();
@@ -153,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        });*/
     }
 
     /**
