@@ -1,4 +1,4 @@
-package pe.edu.upc.pmcontrolpuntoventa;
+package pe.edu.upc.pmcontrolpuntoventa.utilities;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

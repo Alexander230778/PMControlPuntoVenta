@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pe.edu.upc.pmcontrolpuntoventa.Home"
+    tools:context="pe.edu.upc.pmcontrolpuntoventa.activities.Home"
     tools:ignore="MergeRootFrame">
 
     <TextView
