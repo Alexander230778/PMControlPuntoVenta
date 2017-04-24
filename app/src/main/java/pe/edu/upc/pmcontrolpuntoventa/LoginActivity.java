@@ -112,12 +112,17 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void invokeWS(RequestParams params){
         //FORMA2
-        AndroidNetworking.post(NewsApi.LOGIN_URL)
+        /*// Show Progress Dialog
+        prgDialog.show();
+        //Call
+        AndroidNetworking.post("http://gest.saccaco.me/auth/login?")
                 .addBodyParameter(params)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        // Hide Progress Dialog
+                        prgDialog.hide();
                         try {
                             if (response.getString("status").equalsIgnoreCase("ACTIVE")){
                                 Toast.makeText(getApplicationContext(), "You are successfully logged in!" + response.getString("api_token"), Toast.LENGTH_LONG).show();
@@ -134,17 +139,28 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
                         // Hide Progress Dialog
                         prgDialog.hide();
-                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        // When Http response code is '404'
+                        if(anError.getErrorCode() == 404){
+                            Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code is '500'
+                        else if(anError.getErrorCode() == 500){
+                            Toast.makeText(getApplicationContext(), "Something went wrong at server end" + anError.getErrorBody() + anError.getErrorDetail(), Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code other than 404, 500
+                        else{
+                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        }
                         Log.d(TAG, anError.getLocalizedMessage());
                     }
-                });
+                });*/
 
         //FORMA1
-        /*// Show Progress Dialog
+        // Show Progress Dialog
         prgDialog.show();
         // Make RESTful webservice call using AsyncHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://gest.saccaco.me/auth/login",params ,new AsyncHttpResponseHandler() {
+        client.post("http://gest.saccaco.me/auth/login?name=wsaccaco&password=tetitas123", null ,new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -152,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                 prgDialog.hide();
                 try {
                     // JSON Object
-                    JSONObject obj = new JSONObject(response.toString());
+                    JSONObject obj = new JSONObject(new String(response));
                     // When the JSON response has status boolean value assigned with true
                     if(obj.getString("status").equalsIgnoreCase("ACTIVE")){
                         Toast.makeText(getApplicationContext(), "You are successfully logged in!" + obj.getString("api_token"), Toast.LENGTH_LONG).show();
@@ -188,7 +204,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
                 }
             }
-        });*/
+        });
     }
 
     /**
