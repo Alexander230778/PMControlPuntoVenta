@@ -13,12 +13,23 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
@@ -90,121 +101,56 @@ public class LoginActivity extends AppCompatActivity {
         String name = nameET.getText().toString();
         // Get Password Edit View Value
         String password = pwdET.getText().toString();
-        // Instantiate Http Request Param Object
-        RequestParams params = new RequestParams();
+
         // When Name Edit View and Password Edit View have values other than Null
         if(Utility.isNotNull(name) && Utility.isNotNull(password)){
             // Put Http parameter username with value of Email Edit View control
-            params.put("name", name);
-            // Put Http parameter password with value of Password Edit Value control
-            params.put("password", password);
             // Invoke RESTful Web Service with Http parameters
-            invokeWS(params);
+            invokeWS(name, password);
         } else{
-            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No puede haber campos vacios", Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
-     * Method that performs RESTful webservice invocations
-     *
-     * @param params
-     */
-    public void invokeWS(RequestParams params){
-        //FORMA2
-        /*// Show Progress Dialog
+    public void invokeWS(final String name, final String password){
+
         prgDialog.show();
-        //Call
-        AndroidNetworking.post("http://gest.saccaco.me/auth/login?")
-                .addBodyParameter(params)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("name", name);
+            obj.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, NewsApi.URL_LOGIN, obj,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Hide Progress Dialog
-                        prgDialog.hide();
                         try {
-                            if (response.getString("status").equalsIgnoreCase("ACTIVE")){
-                                Toast.makeText(getApplicationContext(), "You are successfully logged in!" + response.getString("api_token"), Toast.LENGTH_LONG).show();
-                                Log.d(TAG, response.getString("api_token"));
-                                // Navigate to Home screen
+                            if (response.getString("status").equals("ACTIVE")) {
+                                prgDialog.hide();
                                 navigatetoHome();
+                            }else {
+                                prgDialog.hide();
+                                Toast.makeText(getApplicationContext(), "Error de usuario y/o contraseña", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
+                },
+                new Response.ErrorListener() {
                     @Override
-                    public void onError(ANError anError) {
-                        // Hide Progress Dialog
-                        prgDialog.hide();
-                        // When Http response code is '404'
-                        if(anError.getErrorCode() == 404){
-                            Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code is '500'
-                        else if(anError.getErrorCode() == 500){
-                            Toast.makeText(getApplicationContext(), "Something went wrong at server end" + anError.getErrorBody() + anError.getErrorDetail(), Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code other than 404, 500
-                        else{
-                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
-                        }
-                        Log.d(TAG, anError.getLocalizedMessage());
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "ErrorListener Login", Toast.LENGTH_LONG).show();
                     }
-                });*/
+                });
+        queue.add(postRequest);
 
-        //FORMA1
-        // Show Progress Dialog
-        prgDialog.show();
-        // Make RESTful webservice call using AsyncHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://gest.saccaco.me/auth/login?name=wsaccaco&password=tetitas123", null ,new AsyncHttpResponseHandler() {
-            // When the response returned by REST has Http response code '200'
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // Hide Progress Dialog
-                prgDialog.hide();
-                try {
-                    // JSON Object
-                    JSONObject obj = new JSONObject(new String(response));
-                    // When the JSON response has status boolean value assigned with true
-                    if(obj.getString("status").equalsIgnoreCase("ACTIVE")){
-                        Toast.makeText(getApplicationContext(), "You are successfully logged in!" + obj.getString("api_token"), Toast.LENGTH_LONG).show();
-                        // Navigate to Home screen
-                        navigatetoHome();
-                    }
-                    // Else display error message
-                    else{
-                        errorMsg.setText("User no exists.");
-                        Toast.makeText(getApplicationContext(), "User no exists.", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // Hide Progress Dialog
-                prgDialog.hide();
-                // When Http response code is '404'
-                if(statusCode == 404){
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
-                }
-                // When Http response code is '500'
-                else if(statusCode == 500){
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                }
-                // When Http response code other than 404, 500
-                else{
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     /**
