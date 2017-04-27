@@ -1,4 +1,4 @@
-package pe.edu.upc.pmcontrolpuntoventa;
+package pe.edu.upc.pmcontrolpuntoventa.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class map_encargado extends AppCompatActivity
+import pe.edu.upc.pmcontrolpuntoventa.R;
+
+public class MapEncargado extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override

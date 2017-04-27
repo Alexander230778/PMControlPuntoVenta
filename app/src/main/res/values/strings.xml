@@ -7,4 +7,8 @@
     <string name="login_title">Login</string>
     <string name="user">User</string>
     <string name="pwd">Password</string>
+    <string name="title_activity_map_encargado">map_encargado</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

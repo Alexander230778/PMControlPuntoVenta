@@ -33,6 +33,7 @@ import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
+import pe.edu.upc.pmcontrolpuntoventa.activities.MapEncargado;
 import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
 
@@ -157,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
      * Method which navigates from Login Activity to Home Activity
      */
     public void navigatetoHome(){
-        Intent homeIntent = new Intent(getApplicationContext(),Home.class);
+        Intent homeIntent = new Intent(getApplicationContext(), MapEncargado.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
     }

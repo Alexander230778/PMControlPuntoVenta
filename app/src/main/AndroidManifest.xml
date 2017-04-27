@@ -24,8 +24,11 @@
         </activity>
         <activity
             android:name=".activities.Home"
-            android:label="@string/title_activity_home" >
-        </activity>
+            android:label="@string/title_activity_home"></activity>
+        <activity
+            android:name=".activities.MapEncargado"
+            android:label="@string/title_activity_map_encargado"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
