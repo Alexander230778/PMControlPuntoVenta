@@ -33,6 +33,7 @@ import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
+import pe.edu.upc.pmcontrolpuntoventa.activities.MapApi;
 import pe.edu.upc.pmcontrolpuntoventa.activities.MapEncargado;
 import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
@@ -148,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getApplicationContext(), "ErrorListener Login", Toast.LENGTH_LONG).show();
+                        prgDialog.hide();
                     }
                 });
         queue.add(postRequest);
