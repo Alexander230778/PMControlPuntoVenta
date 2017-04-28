@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardCornerRadius="4dp"
-    android:id="@+id/itemCardView">
+    android:id="@+id/attendancesCardView">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,13 +18,13 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/dateDayTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Miercoles 19 de Enero"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/nameTextView"/>
+                android:layout_marginBottom="5dp" />
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -32,14 +32,14 @@
                 android:layout_weight="1"
                 android:gravity="center" >
                 <TextView
-                    android:id="@+id/tvCodeNameDetail"
+                    android:id="@+id/hourCheckintTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="8:00AM"
                     android:layout_weight="1"
                     android:gravity="center" />
                 <TextView
-                    android:id="@+id/tvCodeName"
+                    android:id="@+id/hourCheckoutTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="9:30PM"

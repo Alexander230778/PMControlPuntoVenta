@@ -6,7 +6,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
 
@@ -66,15 +69,64 @@ public class Attendance {
         return this;
     }
 
+//    public static Source build(JSONObject jsonSource) {
+//        if(jsonSource == null) return null;
+//        Source source = new Source();
+//        try {
+//            Map<String, String> urlsToLogos = new HashMap<>();
+//            urlsToLogos.put("small",
+//                    jsonSource.getJSONObject("urlsToLogos")
+//                            .getString("small"));
+//            urlsToLogos.put("medium",
+//                    jsonSource.getJSONObject("urlsToLogos")
+//                            .getString("medium"));
+//            urlsToLogos.put("large",
+//                    jsonSource.getJSONObject("urlsToLogos")
+//                            .getString("large"));
+//            int length = jsonSource.getJSONArray("sortBysAvailable").length();
+//            List<String> sortBysAvailable = new ArrayList<>();
+//            for(int i = 0; i < length; i++) {
+//                sortBysAvailable.add(
+//                        jsonSource.getJSONArray("sortBysAvailable")
+//                                .getString(i));
+//            }
+//            source.setId(jsonSource.getString("id"))
+//                    .setName(jsonSource.getString("name"))
+//                    .setDescription(jsonSource.getString("description"))
+//                    .setUrl(jsonSource.getString("url"))
+//                    .setCategory(jsonSource.getString("category"))
+//                    .setLanguage(jsonSource.getString("language"))
+//                    .setCountry(jsonSource.getString("country"))
+//                    .setUrlsToLogos(urlsToLogos)
+//                    .setSortBysAvailable(sortBysAvailable);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return source;
+//    }
+
     public static Attendance build(JSONObject jsonSource) {
         if(jsonSource == null) return null;
         Attendance attendance = new Attendance();
 
         try {
+            Map<String, JSONArray> attendances = new HashMap<>();
+
+            Iterator<?> keys = jsonSource.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                attendances.put(key,
+                        jsonSource.getJSONObject("attendance")
+                                .getJSONArray(key));
+            }
+
+
             attendance.setId(jsonSource.getInt("id"))
                     .setType(jsonSource.getString("type"))
                     .setDate(Utility.convertDate(jsonSource.getString("date")))
-                    .setLatIng(jsonSource.getString("latIng"))
+                    .setLatIng(jsonSource.getString("latlng"))
                     .setEmployees_id(jsonSource.getInt("employees_id"));
 
         } catch (JSONException e) {
