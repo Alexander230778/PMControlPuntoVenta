@@ -111,16 +111,16 @@ public class Attendance {
         Attendance attendance = new Attendance();
 
         try {
-            Map<String, JSONArray> attendances = new HashMap<>();
+//            Map<String, JSONArray> attendances = new HashMap<>();
 
-            Iterator<?> keys = jsonSource.keys();
+//            Iterator<?> keys = jsonSource.keys();
 
-            while( keys.hasNext() ) {
-                String key = (String)keys.next();
-                attendances.put(key,
-                        jsonSource.getJSONObject("attendance")
-                                .getJSONArray(key));
-            }
+//            while( keys.hasNext() ) {
+//                String key = (String)keys.next();
+//                attendances.put(key,
+//                        jsonSource.getJSONObject("attendance")
+//                                .getJSONArray(key));
+//            }
 
 
             attendance.setId(jsonSource.getInt("id"))

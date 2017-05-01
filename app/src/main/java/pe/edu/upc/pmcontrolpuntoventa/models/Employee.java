@@ -5,7 +5,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by ALEXANDER23 on 23/04/2017.
@@ -19,6 +22,7 @@ public class Employee {
     private String doc_number;
     private String type;
     private Integer shops_id;
+    private Map<String, List<Attendance>> attendances;
 
     public Integer getId() {
         return id;
@@ -83,6 +87,36 @@ public class Employee {
         return this;
     }
 
+    public Map<String, List<Attendance>> getAttendances() {
+        return attendances;
+    }
+
+    public Employee setAttendances(JSONObject attendances) {
+            Iterator<?> keys = attendances.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                try{
+                    JSONArray attendancesArray = attendances.getJSONArray(key);
+                    if(attendancesArray == null) return null;
+                    int length = attendancesArray.length();
+                    List<Attendance> listAttendance = new ArrayList<>();
+                    for(int i = 0; i < length; i++) {
+                        try {
+                            listAttendance.add(Attendance.build(attendancesArray.getJSONObject(i)));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    this.attendances.put(key, listAttendance);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        return this;
+    }
+
     public static Employee build(JSONObject jsonSource) {
         if(jsonSource == null) return null;
         Employee employee = new Employee();
@@ -94,6 +128,10 @@ public class Employee {
                     .setDoc_number(jsonSource.getString("doc_number"))
                     .setType(jsonSource.getString("type"))
                     .setShops_id(jsonSource.getInt("shops_id"));
+
+            if (jsonSource.getJSONObject("attendance") != null) {
+                employee.setAttendances(jsonSource.getJSONObject("attendance"));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

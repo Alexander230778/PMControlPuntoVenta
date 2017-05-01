@@ -3,6 +3,9 @@ package pe.edu.upc.pmcontrolpuntoventa.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +16,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import pe.edu.upc.pmcontrolpuntoventa.PuntoVentaApp;
 import pe.edu.upc.pmcontrolpuntoventa.R;
+import pe.edu.upc.pmcontrolpuntoventa.adapters.AttendancesAdapter;
+import pe.edu.upc.pmcontrolpuntoventa.models.Attendance;
+import pe.edu.upc.pmcontrolpuntoventa.models.Employee;
+import pe.edu.upc.pmcontrolpuntoventa.models.User;
+import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 
 public class MapEncargado extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RecyclerView attendancesRecyclerView;
+    RecyclerView.LayoutManager attendancesLayoutManager;
+    AttendancesAdapter attendancesAdapter;
+    Employee employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +68,52 @@ public class MapEncargado extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        attendancesLayoutManager = new LinearLayoutManager(this);
+        attendancesAdapter = new AttendancesAdapter();
+        employee = new Employee();
+
+        attendancesLayoutManager = new LinearLayoutManager(this);
+        attendancesAdapter = new AttendancesAdapter();
+        attendancesAdapter.setEmployee(employee);
+        attendancesRecyclerView = (RecyclerView) findViewById(R.id.attendancesRecyclerView);
+        attendancesRecyclerView.setLayoutManager(attendancesLayoutManager);
+        attendancesRecyclerView.setAdapter(attendancesAdapter);
+
+        updateSources();
+
+    }
+
+
+    private void updateSources() {
+
+        AndroidNetworking.get(NewsApi.URL_ATTENDANCES_FOR_USER("5", getIntent().getExtras().getString("api_token")))
+                .addQueryParameter("language", "en")
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(response == null) return;
+System.out.print(response);
+                        if(response.length() < 0) {
+                            Log.d("ERROR Employeee", "error");
+                            return;
+                        }
+
+                        employee = Employee.build(response);
+                        attendancesAdapter.setEmployee(employee);
+                        attendancesAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d("ERROR Employeee", anError.getLocalizedMessage());
+                    }
+                });
+
     }
 
     @Override

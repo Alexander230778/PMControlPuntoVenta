@@ -35,6 +35,7 @@ import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
 import pe.edu.upc.pmcontrolpuntoventa.activities.MapApi;
 import pe.edu.upc.pmcontrolpuntoventa.activities.MapEncargado;
+import pe.edu.upc.pmcontrolpuntoventa.models.User;
 import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
 
@@ -48,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText nameET;
     // Password Edit View Object
     EditText pwdET;
+
+    private static User user;
 
     private static String TAG="Login";
 
@@ -135,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("ACTIVE")) {
                                 prgDialog.hide();
+                                user = User.build(response);
                                 navigatetoHome();
                             }else {
                                 prgDialog.hide();
@@ -161,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void navigatetoHome(){
         Intent homeIntent = new Intent(getApplicationContext(), MapEncargado.class);
+        homeIntent.putExtra("api_token", user.getApi_token());
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
     }

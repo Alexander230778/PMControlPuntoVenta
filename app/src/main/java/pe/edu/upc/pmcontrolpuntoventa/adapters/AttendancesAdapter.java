@@ -8,18 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.util.List;
+import java.util.Map;
 
 
 import pe.edu.upc.pmcontrolpuntoventa.R;
 import pe.edu.upc.pmcontrolpuntoventa.models.Attendance;
+import pe.edu.upc.pmcontrolpuntoventa.models.Employee;
+
 
 /**
  * Created by proyecto on 10/04/2017.
  */
 
 public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.ViewHolder> {
-    private List<Attendance> attendances;
+    private Employee employees;
+
     @Override
     public AttendancesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
@@ -31,8 +37,25 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
 
     @Override
     public void onBindViewHolder(AttendancesAdapter.ViewHolder holder, final int position) {
-        holder.nameTextView.setText(attendances.get(position).getDate().toString());
-        holder.descriptionTextView.setText(attendances.get(position).getDescription());
+        if(employees.getAttendances() == null) return;;
+        for ( String key : employees.getAttendances().keySet() ) {
+            holder.dateDayTextView.setText(key);
+            List<Attendance> listAttendance = employees.getAttendances().get(key);
+
+            for(int i = 0; i < listAttendance.size(); i++) {
+                Attendance attendance = listAttendance.get(i);
+                switch (attendance.getType()){
+                    case "checkin":
+                        holder.hourCheckintTextView.setText(attendance.getDate().toString());
+                        break;
+                    case "checkout":
+                        holder.hourCheckoutTextView.setText(attendance.getDate().toString());
+                        break;
+                }
+            }
+
+        }
+
 //        holder.sourceCardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -49,26 +72,28 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
 
     @Override
     public int getItemCount() {
-        return attendances.size();
+        return 2;
     }
 
-    public List<Attendance> getAttendances() {
-        return attendances;
+    public Map<String, List<Attendance>> getAttendances() {
+        return employees.getAttendances();
     }
 
-    public void setSources(List<Attendance> attendances) {
-        this.attendances = attendances;
+    public void setEmployee(Employee employee){
+        this.employees = employee;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        CardView sourceCardView;
-        TextView nameTextView;
-        TextView descriptionTextView;
+        CardView attendancesCardView;
+        TextView dateDayTextView;
+        TextView hourCheckintTextView;
+        TextView hourCheckoutTextView;
         public ViewHolder(View itemView) {
             super(itemView);
-            sourceCardView = (CardView) itemView.findViewById(R.id.attendancesCardView);
-            nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-            descriptionTextView = (TextView) itemView.findViewById(R.id.descriptionTextView);
+            attendancesCardView = (CardView) itemView.findViewById(R.id.attendancesCardView);
+            dateDayTextView = (TextView) itemView.findViewById(R.id.dateDayTextView);
+            hourCheckintTextView = (TextView) itemView.findViewById(R.id.hourCheckintTextView);
+            hourCheckoutTextView = (TextView) itemView.findViewById(R.id.hourCheckoutTextView);
         }
     }
 }
