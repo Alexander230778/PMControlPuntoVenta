@@ -80,7 +80,7 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
     }
 
     public void setEmployee(Employee employee){
-        this.employees = employee;
+        employees = employee;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

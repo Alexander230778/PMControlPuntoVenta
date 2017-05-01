@@ -10,7 +10,7 @@ public class NewsApi {
     public static String URL_LOGIN = "http://gest.saccaco.me/auth/login";
     public static String URL_LOGOUT = "http://gest.saccaco.me/auth/logout";
     public static String URL_ATTENDANCES_FOR_USER(String employee, String api_token){
-        return "http://gest.saccaco.me/api/employees/"+employee+"/attendances?api_token"+api_token;
+        return "http://gest.saccaco.me/api/employees/"+employee+"/attendances?api_token="+api_token;
     }
 
     private User user;

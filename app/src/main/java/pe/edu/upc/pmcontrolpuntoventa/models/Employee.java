@@ -108,7 +108,7 @@ public class Employee {
                             e.printStackTrace();
                         }
                     }
-                    this.attendances.put(key, listAttendance);
+                    attendances.put(key, listAttendance);
                 }catch (JSONException e){
                     e.printStackTrace();
                 }

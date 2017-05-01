@@ -87,7 +87,7 @@ public class MapEncargado extends AppCompatActivity
 
 
     private void updateSources() {
-
+        System.out.print(NewsApi.URL_ATTENDANCES_FOR_USER("5", getIntent().getExtras().getString("api_token")));
         AndroidNetworking.get(NewsApi.URL_ATTENDANCES_FOR_USER("5", getIntent().getExtras().getString("api_token")))
                 .addQueryParameter("language", "en")
                 .setPriority(Priority.LOW)
@@ -96,7 +96,6 @@ public class MapEncargado extends AppCompatActivity
                     @Override
                     public void onResponse(JSONObject response) {
                         if(response == null) return;
-System.out.print(response);
                         if(response.length() < 0) {
                             Log.d("ERROR Employeee", "error");
                             return;
@@ -110,6 +109,7 @@ System.out.print(response);
 
                     @Override
                     public void onError(ANError anError) {
+                        Log.d("error conextion", NewsApi.URL_ATTENDANCES_FOR_USER("5", getIntent().getExtras().getString("api_token")));
                         Log.d("ERROR Employeee", anError.getLocalizedMessage());
                     }
                 });
