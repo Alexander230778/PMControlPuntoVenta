@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 import pe.edu.upc.pmcontrolpuntoventa.R;
@@ -37,23 +39,25 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
 
     @Override
     public void onBindViewHolder(AttendancesAdapter.ViewHolder holder, final int position) {
-        if(employees.getAttendances() == null) return;;
+        if(employees.getAttendances().size() == 0) return;
+        ArrayList<String> listKeys = new ArrayList<String>();
         for ( String key : employees.getAttendances().keySet() ) {
-            holder.dateDayTextView.setText(key);
-            List<Attendance> listAttendance = employees.getAttendances().get(key);
+            listKeys.add(key);
+        }
+        String currentKey = listKeys.get(position);
+        holder.dateDayTextView.setText(currentKey);
+        List<Attendance> listAttendance = employees.getAttendances().get(currentKey);
 
-            for(int i = 0; i < listAttendance.size(); i++) {
-                Attendance attendance = listAttendance.get(i);
-                switch (attendance.getType()){
-                    case "checkin":
-                        holder.hourCheckintTextView.setText(attendance.getDate().toString());
-                        break;
-                    case "checkout":
-                        holder.hourCheckoutTextView.setText(attendance.getDate().toString());
-                        break;
-                }
+        for(int i = 0; i < listAttendance.size(); i++) {
+            Attendance attendance = listAttendance.get(i);
+            switch (attendance.getType()){
+                case "checkin":
+                    holder.hourCheckintTextView.setText(attendance.getHour());
+                    break;
+                case "checkout":
+                    holder.hourCheckoutTextView.setText(attendance.getHour());
+                    break;
             }
-
         }
 
 //        holder.sourceCardView.setOnClickListener(new View.OnClickListener() {

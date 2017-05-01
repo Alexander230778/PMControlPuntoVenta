@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class Employee {
     private String doc_number;
     private String type;
     private Integer shops_id;
-    private Map<String, List<Attendance>> attendances;
+    private Map<String, List<Attendance>> attendances = new HashMap<String, List<Attendance>>();;
 
     public Integer getId() {
         return id;
@@ -91,13 +92,12 @@ public class Employee {
         return attendances;
     }
 
-    public Employee setAttendances(JSONObject attendances) {
-            Iterator<?> keys = attendances.keys();
-
+    public Employee setAttendances(JSONObject attendancesObj) {
+            Iterator<?> keys = attendancesObj.keys();
             while( keys.hasNext() ) {
                 String key = (String)keys.next();
                 try{
-                    JSONArray attendancesArray = attendances.getJSONArray(key);
+                    JSONArray attendancesArray = attendancesObj.getJSONArray(key);
                     if(attendancesArray == null) return null;
                     int length = attendancesArray.length();
                     List<Attendance> listAttendance = new ArrayList<>();
@@ -108,12 +108,13 @@ public class Employee {
                             e.printStackTrace();
                         }
                     }
-                    attendances.put(key, listAttendance);
+                    this.attendances.put(key, listAttendance);
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
 
             }
+//            this.attendances = attendances;
         return this;
     }
 
