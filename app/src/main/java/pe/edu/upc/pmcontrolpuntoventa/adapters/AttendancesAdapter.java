@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -92,12 +94,15 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
         TextView dateDayTextView;
         TextView hourCheckintTextView;
         TextView hourCheckoutTextView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             attendancesCardView = (CardView) itemView.findViewById(R.id.attendancesCardView);
             dateDayTextView = (TextView) itemView.findViewById(R.id.dateDayTextView);
             hourCheckintTextView = (TextView) itemView.findViewById(R.id.hourCheckintTextView);
             hourCheckoutTextView = (TextView) itemView.findViewById(R.id.hourCheckoutTextView);
+
+
         }
     }
 }

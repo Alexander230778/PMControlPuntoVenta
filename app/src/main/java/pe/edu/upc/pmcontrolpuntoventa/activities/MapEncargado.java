@@ -21,6 +21,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ public class MapEncargado extends AppCompatActivity
     RecyclerView.LayoutManager attendancesLayoutManager;
     AttendancesAdapter attendancesAdapter;
     Employee employee;
+    RecyclerViewHeader headerAttendancesRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,8 @@ public class MapEncargado extends AppCompatActivity
         attendancesRecyclerView = (RecyclerView) findViewById(R.id.attendancesRecyclerView);
         attendancesRecyclerView.setLayoutManager(attendancesLayoutManager);
         attendancesRecyclerView.setAdapter(attendancesAdapter);
-
+        headerAttendancesRecyclerView = (RecyclerViewHeader) findViewById(R.id.headerAttendancesRecyclerView);
+        headerAttendancesRecyclerView.attachTo(attendancesRecyclerView);
         updateSources();
 
     }
