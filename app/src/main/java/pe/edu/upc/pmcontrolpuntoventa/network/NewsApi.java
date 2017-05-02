@@ -1,5 +1,7 @@
 package pe.edu.upc.pmcontrolpuntoventa.network;
 
+import java.util.List;
+
 import pe.edu.upc.pmcontrolpuntoventa.models.User;
 
 /**
@@ -13,14 +15,14 @@ public class NewsApi {
         return "http://gest.saccaco.me/api/employees/"+employee+"/attendances?api_token="+api_token;
     }
 
-    private User user;
+    private List<User> user;
 
     public User getUser() {
-        return user;
+        return user.get(0);
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.user.add(0, user);
     }
 
 

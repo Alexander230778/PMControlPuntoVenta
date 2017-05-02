@@ -50,7 +50,16 @@
 
         <activity
             android:name=".activities.MapApi"
-            android:label="@string/title_activity_map_api"></activity>
+            android:label="@string/title_activity_map_api" />
+        <activity
+            android:name=".activities.Report"
+            android:label="@string/title_activity_report"
+            android:parentActivityName=".activities.Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pe.edu.upc.pmcontrolpuntoventa.activities.Home" />
+        </activity>
     </application>
 
 </manifest>

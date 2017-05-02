@@ -17,6 +17,7 @@ public class User {
     private String api_token;
     private String status;
     private Integer employees_id;
+    private List<User> instance;
 
     public String getName() {
         return name;

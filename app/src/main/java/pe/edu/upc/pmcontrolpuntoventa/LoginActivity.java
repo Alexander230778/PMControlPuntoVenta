@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.getString("status").equals("ACTIVE")) {
                                 prgDialog.hide();
                                 user = User.build(response);
+                                PuntoVentaApp.getInstance().setCurrentUser(user);
                                 navigatetoHome();
                             }else {
                                 prgDialog.hide();
@@ -164,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
      * Method which navigates from Login Activity to Home Activity
      */
     public void navigatetoHome(){
-        Intent homeIntent = new Intent(getApplicationContext(), MapEncargado.class);
+        Intent homeIntent = new Intent(getApplicationContext(), Home.class);
         homeIntent.putExtra("api_token", user.getApi_token());
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
