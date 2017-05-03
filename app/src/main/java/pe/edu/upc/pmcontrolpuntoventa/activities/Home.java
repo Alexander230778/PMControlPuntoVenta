@@ -23,11 +23,25 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Displays Home Screen
-//        if(api_token == null)
-            api_token = PuntoVentaApp.getInstance().getCurrentUser().getApi_token();
-//            api_token = getIntent().getExtras().getString("api_token");
         setContentView(R.layout.home);
+        if (savedInstanceState == null) {
+            api_token = getIntent().getExtras().getString("api_token");
+        } else {
+            api_token = savedInstanceState.getString("api_token");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        api_token = getIntent().getExtras().getString("api_token");
+        savedInstanceState.putString("api_token", api_token);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        api_token = savedInstanceState.getString("api_token");
     }
 
     public void navigatetoReport(View view){

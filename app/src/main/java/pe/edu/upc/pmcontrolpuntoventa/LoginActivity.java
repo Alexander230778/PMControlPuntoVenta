@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     // Password Edit View Object
     EditText pwdET;
 
-    private static User user;
+    private static User user = new User();
 
     private static String TAG="Login";
 
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.getString("status").equals("ACTIVE")) {
                                 prgDialog.hide();
                                 user = User.build(response);
-                                PuntoVentaApp.getInstance().setCurrentUser(user);
+//                                PuntoVentaApp.getInstance().setCurrentUser(user);
                                 navigatetoHome();
                             }else {
                                 prgDialog.hide();
