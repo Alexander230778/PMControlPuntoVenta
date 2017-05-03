@@ -35,6 +35,7 @@ import cz.msebera.android.httpclient.Header;
 import pe.edu.upc.pmcontrolpuntoventa.activities.Home;
 import pe.edu.upc.pmcontrolpuntoventa.activities.MapApi;
 import pe.edu.upc.pmcontrolpuntoventa.activities.MapEncargado;
+import pe.edu.upc.pmcontrolpuntoventa.models.CurrentUser;
 import pe.edu.upc.pmcontrolpuntoventa.models.User;
 import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 import pe.edu.upc.pmcontrolpuntoventa.utilities.Utility;
@@ -139,7 +140,20 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.getString("status").equals("ACTIVE")) {
                                 prgDialog.hide();
                                 user = User.build(response);
-//                                PuntoVentaApp.getInstance().setCurrentUser(user);
+                                //PuntoVentaApp.getInstance().setCurrentUser(user);
+
+                                //SQLLite - CurrentUser - set
+                                //Clean
+                                CurrentUser.deleteAll(CurrentUser.class);
+                                //Save current user
+                                CurrentUser currentUser = new CurrentUser();
+                                currentUser.setName(user.getName());
+                                currentUser.setApi_token(user.getApi_token());
+                                currentUser.setStatus(user.getStatus());
+                                currentUser.setEmployees_id(user.getEmployees_id());
+                                currentUser.save();
+                                //SQLLite - CurrentUser - set
+
                                 navigatetoHome();
                             }else {
                                 prgDialog.hide();
