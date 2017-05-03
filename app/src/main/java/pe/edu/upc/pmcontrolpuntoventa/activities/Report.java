@@ -18,6 +18,7 @@ import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 
 import org.json.JSONObject;
 
+import pe.edu.upc.pmcontrolpuntoventa.PuntoVentaApp;
 import pe.edu.upc.pmcontrolpuntoventa.R;
 import pe.edu.upc.pmcontrolpuntoventa.adapters.AttendancesAdapter;
 import pe.edu.upc.pmcontrolpuntoventa.models.CurrentUser;
@@ -62,17 +63,17 @@ public class Report extends AppCompatActivity {
 
     private void updateSources() {
         //SQLLite - CurrentUser - get
-        String api_token="";
+        String api_token;
         Integer employees_id=0;
 
-        if (CurrentUser.count(CurrentUser.class)>0) {
-            api_token = CurrentUser.listAll(CurrentUser.class).get(0).getApi_token();
-            employees_id = CurrentUser.listAll(CurrentUser.class).get(0).getEmployees_id();
-        }
+//        if (CurrentUser.count(CurrentUser.class)>0) {
+//            api_token = CurrentUser.listAll(CurrentUser.class).get(0).getApi_token();
+//            employees_id = CurrentUser.listAll(CurrentUser.class).get(0).getEmployees_id();
+//        }
         //SQLLite - CurrentUser - get
 
         //AndroidNetworking.get(NewsApi.URL_ATTENDANCES_FOR_USER("5", getIntent().getExtras().getString("api_token")))
-        AndroidNetworking.get(NewsApi.URL_ATTENDANCES_FOR_USER(employees_id.toString(), api_token))
+        AndroidNetworking.get(NewsApi.URL_ATTENDANCES_FOR_USER(employees_id.toString(), PuntoVentaApp.getInstance().getCurrentUser().getApi_token()))
                 .addQueryParameter("language", "en")
                 .setPriority(Priority.LOW)
                 .build()

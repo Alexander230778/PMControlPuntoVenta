@@ -18,7 +18,9 @@ import java.util.Map;
 import java.util.Set;
 
 
+import pe.edu.upc.pmcontrolpuntoventa.PuntoVentaApp;
 import pe.edu.upc.pmcontrolpuntoventa.R;
+import pe.edu.upc.pmcontrolpuntoventa.activities.MapApi;
 import pe.edu.upc.pmcontrolpuntoventa.models.Attendance;
 import pe.edu.upc.pmcontrolpuntoventa.models.Employee;
 
@@ -29,7 +31,7 @@ import pe.edu.upc.pmcontrolpuntoventa.models.Employee;
 
 public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.ViewHolder> {
     private Employee employees;
-
+    String currentKey;
     @Override
     public AttendancesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
@@ -46,7 +48,7 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
         for ( String key : employees.getAttendances().keySet() ) {
             listKeys.add(key);
         }
-        String currentKey = listKeys.get(position);
+        currentKey = listKeys.get(position);
         holder.dateDayTextView.setText(currentKey);
         List<Attendance> listAttendance = employees.getAttendances().get(currentKey);
 
@@ -62,18 +64,18 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
             }
         }
 
-//        holder.sourceCardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CatchUpApp
-//                        .getInstance()
-//                        .setCurrentSource(sources.get(position));
-//                v.getContext().startActivity(
-//                        new Intent(
-//                            v.getContext(),
-//                            ArticlesActivity.class));
-//            }
-//        });
+        holder.attendancesCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PuntoVentaApp
+                        .getInstance()
+                        .setCurrentAttendance(employees.getAttendances().get(currentKey));
+                v.getContext().startActivity(
+                        new Intent(
+                            v.getContext(),
+                            MapApi.class));
+            }
+        });
     }
 
     @Override

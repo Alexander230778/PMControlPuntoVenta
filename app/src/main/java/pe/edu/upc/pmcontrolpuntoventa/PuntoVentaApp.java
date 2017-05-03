@@ -4,6 +4,9 @@ import android.app.Application;
 
 import com.androidnetworking.AndroidNetworking;
 
+import java.util.List;
+
+import pe.edu.upc.pmcontrolpuntoventa.models.Attendance;
 import pe.edu.upc.pmcontrolpuntoventa.models.User;
 import pe.edu.upc.pmcontrolpuntoventa.network.NewsApi;
 
@@ -35,6 +38,15 @@ public class PuntoVentaApp extends Application {
 
     public User getCurrentUser() {
         return newsApi.getUser();
+    }
+
+
+    public List<Attendance> getCurrentAttendance(){
+        return newsApi.getAttendance();
+    }
+
+    public void setCurrentAttendance(List<Attendance> attendance){
+        newsApi.setAttendance(attendance);
     }
 
 }
