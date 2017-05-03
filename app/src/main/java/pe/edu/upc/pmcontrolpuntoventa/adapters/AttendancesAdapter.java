@@ -67,6 +67,11 @@ public class AttendancesAdapter extends RecyclerView.Adapter<AttendancesAdapter.
         holder.attendancesCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> listKeys = new ArrayList<String>();
+                for ( String key : employees.getAttendances().keySet() ) {
+                    listKeys.add(key);
+                }
+                currentKey = listKeys.get(position);
                 PuntoVentaApp
                         .getInstance()
                         .setCurrentAttendance(employees.getAttendances().get(currentKey));
